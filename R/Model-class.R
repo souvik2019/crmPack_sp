@@ -856,25 +856,26 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 #' @description `r lifecycle::badge("stable")`
 #'
 #' [`LogisticNormalMixture`] is the class for standard logistic regression model
-#' with a mixture of two bivariate normal priors on the intercept and slope parameters.
+#' with a mixture of k (>1) bivariate normal priors on the intercept and slope parameters.
 #'
 #' @details The covariate is the natural logarithm of the dose \eqn{x} divided by
 #'   the reference dose \eqn{x*}, i.e.:
 #'   \deqn{logit[p(x)] = alpha0 + alpha1 * log(x/x*),}
 #'   where \eqn{p(x)} is the probability of observing a DLT for a given dose \eqn{x}.
 #'   The prior
-#'   \deqn{(alpha0, alpha1) ~ w * Normal(mean1, cov1) + (1 - w) * Normal(mean2, cov2).}
-#'   The weight w for the first component is assigned a beta prior `B(a, b)`.
+#'   \deqn{(alpha0, alpha1) ~ w1 * Normal(mean1, cov1) + w2 * Normal(mean2, cov2) + ... + wk * Normal(meank, covk)}
+#'   The weights (w1, w2, ..., wk) for k components is assigned a dirichlet prior `Dir(a1, a2, ..., ak)`.
 #'
-#' @note The weight of the two normal priors is a model parameter, hence it is a
+#' @note Weights of the normal priors is a model parameter, hence it is a
 #'   flexible mixture. This type of prior is often used with a mixture of a minimal
 #'   informative and an informative component, in order to make the CRM more robust
 #'   to data deviations from the informative component.
 #'
-#' @slot components (`list`)\cr a list (length k ModelParamsNormal) of bivariate normal prior specification of
-#'   all components
-#' @slot weightpar (`numeric`)\cr the dirichlet parameters for weights of
-#'   components. It must a be a named vector of length k with with strictly positive values.
+#' @slot components (`list`)\cr the specifications of the mixture components,
+#'   a list with [`ModelParamsNormal`] objects for each bivariate (log) normal
+#'   prior.
+#' @slot weightpars (`numeric`)\cr the dirichlet parameters for weights of
+#'   components. It is a vector of length k with with strictly positive values.
 #' @slot ref_dose (`positive_number`)\cr the reference dose.
 #'
 #' @seealso [`ModelParamsNormal`], [`ModelLogNormal`],
@@ -888,15 +889,13 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
   contains = "GeneralModel",
   slots = c(
     components = "list",         # List of (length k) ModelParamsNormal objects
-    #comp1 = "ModelParamsNormal",
-    #comp2 = "ModelParamsNormal",
-    weightpar = "numeric",       # Dirichlet parameters (length k)
+    weightpars = "numeric",       # Dirichlet parameters (length k)
     ref_dose = "numeric"
   ),
   prototype = prototype(
-    components = [ModelParamsNormal(mean = c(0, 1), cov = diag(2)),
-    ModelParamsNormal(mean = c(-1, 1), cov = diag(2))],
-    weightpar = c(a = 1, b = 1),
+    components = list(ModelParamsNormal(mean = c(0, 1), cov = diag(2)),
+    ModelParamsNormal(mean = c(-1, 1), cov = diag(2))),
+    weightpars = c(1,1),
     ref_dose = 1
   ),
   validity = v_model_logistic_normal_mix
@@ -906,10 +905,11 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 
 #' @rdname LogisticNormalMixture-class
 #'
-#' @param components (`ModelParamsNormal`)\cr a list of (length k) bivariate normal prior specification of
-#'   all components. See [`ModelParamsNormal`] for more details.
-#' @param weightpar (`numeric`)\cr the dirichlet parameters for the weight of 
-#'   first components It must a be a named vector of length k with strictly positive values.
+#' @param components (`ModelParamsNormal`)\cr the specifications of the mixture components,
+#'   a list with [`ModelParamsNormal`] objects for each bivariate (log) normal
+#'   prior. See [`ModelParamsNormal`] for more details.
+#' @param weightpars (`numeric`)\cr the dirichlet parameters for the weights of 
+#'   k components. It is a vector of length k with strictly positive values.
 #' @param ref_dose (`number`)\cr the reference dose \eqn{x*}
 #'   (strictly positive number).
 #'
@@ -925,7 +925,7 @@ LogisticNormalMixture <- function(components,
 
   .LogisticNormalMixture(
     components = components,
-    weightpar = weightpar,
+    weightpars = weightpars,
     ref_dose = ref_dose,
     datamodel = function() {
       # The logistic likelihood - the same as for non-mixture case.
@@ -935,25 +935,22 @@ LogisticNormalMixture <- function(components,
       }
     },
     priormodel = function() {
-      weights[1:k] ~ ddirch(weightpar[1:k])
-      comp ~ dcat(weights[1:k])
-      # Conditional on the component index "comp", which is  1 or 2.
-      # comp = 1 with probability "w" and comp = 2 with probability "1 - w".
+      weights ~ ddirch(weightpars)
+      comp ~ dcat(weights)
+      # Conditional on the component index "comp", which is a integer drawn from (1,2, ..., k).
+      # comp = 1 with probability "w1", comp = 2 with probability "w2", ..., comp = k with probability "wk".
       theta ~ dmnorm(mean[1:2, comp], prec[1:2, 1:2, comp])
       alpha0 <- theta[1]
       alpha1 <- theta[2]
     },
     modelspecs = function(from_prior) {
-      mean_mat <- do.call(cbind, lapply(components, function(c) c@mean))
-      prec_array <- array(
-        data = unlist(lapply(components, function(c) c@prec)),
-        dim = c(2, 2, k)
-      )
-
       ms <- list(
-        mean = mean_mat,
-        prec = prec_array,
-        weightpar = weightpar
+        weightpars = weightpars
+        mean = do.call(cbind, lapply(components, h_slots, "mean", simplify = TRUE)),
+        prec = array(
+          do.call(c, lapply(components, h_slots, "prec", simplify = TRUE)),
+          dim = c(2, 2, length(components))
+        )
       )
       if (!from_prior) {
         ms$ref_dose <- ref_dose
@@ -975,15 +972,16 @@ LogisticNormalMixture <- function(components,
 #' @export
 .DefaultLogisticNormalMixture <- function() { # nolint
   LogisticNormalMixture(
-    comp1 = ModelParamsNormal(
+    components = list(ModelParamsNormal(
       mean = c(-0.85, 1),
       cov = matrix(c(1, -0.5, -0.5, 1), nrow = 2)
     ),
-    comp2 = ModelParamsNormal(
+    ModelParamsNormal(
       mean = c(1, 1.5),
       cov = matrix(c(1.2, -0.45, -0.45, 0.6), nrow = 2)
-    ),
-    weightpar = c(a = 1, b = 1),
+    )
+                      ),
+    weightpars = c(1, 1),
     ref_dose = 50
   )
 }
