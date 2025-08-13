@@ -917,16 +917,16 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 #' @example examples/Model-class-LogisticNormalMixture.R
 #'
 LogisticNormalMixture <- function(components,
-                                  weightpar,
+                                  weightpars,
                                   ref_dose) {
   k <- length(components)
-  stopifnot(length(weightpar) == k)
+  stopifnot(length(weightpars) == k)
   assert_number(ref_dose)
 
   .LogisticNormalMixture(
     components = components,
     weightpars = weightpars,
-    ref_dose = ref_dose,
+    ref_dose = positive_number(ref_dose),
     datamodel = function() {
       # The logistic likelihood - the same as for non-mixture case.
       for (i in 1:nObs) {
@@ -945,7 +945,7 @@ LogisticNormalMixture <- function(components,
     },
     modelspecs = function(from_prior) {
       ms <- list(
-        weightpars = weightpars
+        weightpars = weightpars,
         mean = do.call(cbind, lapply(components, h_slots, "mean", simplify = TRUE)),
         prec = array(
           do.call(c, lapply(components, h_slots, "prec", simplify = TRUE)),
@@ -961,7 +961,7 @@ LogisticNormalMixture <- function(components,
       list(theta = c(0, 1))
     },
     datanames = c("nObs", "y", "x"),
-    sample = c("alpha0", "alpha1", "w")
+    sample = c("alpha0", "alpha1", "weightpars")
   )
 }
 
