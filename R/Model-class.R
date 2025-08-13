@@ -910,6 +910,8 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 #'   prior. See [`ModelParamsNormal`] for more details.
 #' @param weightpars (`numeric`)\cr the dirichlet parameters for the weights of 
 #'   k components. It is a vector of length k with strictly positive values.
+#' @param prior_weights Optional length-K vector summing to ~1; if provided with M, weightpars := 1 + M * prior_weights.
+#' @param M Optional positive integer concentration used with prior_weights (total concentration = K + M).
 #' @param ref_dose (`number`)\cr the reference dose \eqn{x*}
 #'   (strictly positive number).
 #'
@@ -917,10 +919,28 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 #' @example examples/Model-class-LogisticNormalMixture.R
 #'
 LogisticNormalMixture <- function(components,
-                                  weightpars,
+  weightpars = NULL,        # optional: user can pass Dirichlet alphas directly
+  prior_weights = NULL,     # optional: user-supplied (w1,...,wk), sums to 1
+  M = NULL,                 # optional: positive integer concentration
                                   ref_dose) {
   k <- length(components)
-  stopifnot(length(weightpars) == k)
+  # --- derive weightpars if needed ---
+  if (is.null(weightpars)) {
+    stopifnot(!is.null(prior_weights), !is.null(M))
+    w <- as.numeric(prior_weights)
+    stopifnot(length(w) == k, all(is.finite(w)), all(w >= 0))
+    s <- sum(w)
+    # tolerate tiny floating error and normalize
+    if (!isTRUE(all.equal(s, 1, tolerance = 1e-8))) w <- w / s
+
+    # require positive integer M
+    stopifnot(length(M) == 1, is.finite(M), M > 0, M == as.integer(M))
+
+    # Dirichlet alphas: 1 + M * w
+    weightpars <- 1 + M * w
+  } else {
+    stopifnot(length(weightpars) == k, all(is.finite(weightpars)), all(weightpars > 0))
+  }
   assert_number(ref_dose)
 
   .LogisticNormalMixture(
