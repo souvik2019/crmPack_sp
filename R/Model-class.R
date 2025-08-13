@@ -935,8 +935,8 @@ LogisticNormalMixture <- function(components,
       }
     },
     priormodel = function() {
-      weights ~ ddirch(weightpars)
-      comp ~ dcat(weights)
+      weights ~ ddirch(weightpars[1:k])
+      comp ~ dcat(weights[1:k])
       # Conditional on the component index "comp", which is a integer drawn from (1,2, ..., k).
       # comp = 1 with probability "w1", comp = 2 with probability "w2", ..., comp = k with probability "wk".
       theta ~ dmnorm(mean[1:2, comp], prec[1:2, 1:2, comp])
@@ -944,13 +944,17 @@ LogisticNormalMixture <- function(components,
       alpha1 <- theta[2]
     },
     modelspecs = function(from_prior) {
+      # Build mean (2 x k) and prec (2 x 2 x k) for JAGS
+      mean <- do.call(cbind, lapply(components, function(cmp) cmp@mean))
+      prec <- array(NA_real_, dim = c(2, 2, k))
+      for (j in seq_len(k)) {
+        P <- if (!is.null(components[[j]]@prec)) components[[j]]@prec else solve(components[[j]]@cov)
+        prec[, , j] <- P
+      }
       ms <- list(
         weightpars = weightpars,
-        mean = do.call(cbind, lapply(components, h_slots, "mean", simplify = TRUE)),
-        prec = array(
-          do.call(c, lapply(components, h_slots, "prec", simplify = TRUE)),
-          dim = c(2, 2, length(components))
-        )
+        mean = mean,
+        prec = prec
       )
       if (!from_prior) {
         ms$ref_dose <- ref_dose
