@@ -955,7 +955,7 @@ LogisticNormalMixture <- function(components,
       }
     },
     priormodel = function() {
-      weights ~ ddirch(weightpars[1:k])
+      weights[1:k] ~ ddirch(weightpars[1:k])
       comp ~ dcat(weights[1:k])
       # Conditional on the component index "comp", which is a integer drawn from (1,2, ..., k).
       # comp = 1 with probability "w1", comp = 2 with probability "w2", ..., comp = k with probability "wk".
@@ -964,6 +964,7 @@ LogisticNormalMixture <- function(components,
       alpha1 <- theta[2]
     },
     modelspecs = function(from_prior) {
+      k <- length(components)
       # Build mean (2 x k) and prec (2 x 2 x k) for JAGS
       mean <- do.call(cbind, lapply(components, function(cmp) cmp@mean))
       prec <- array(NA_real_, dim = c(2, 2, k))
@@ -972,6 +973,7 @@ LogisticNormalMixture <- function(components,
         prec[, , j] <- P
       }
       ms <- list(
+        k = as.integer(k)
         weightpars = weightpars,
         mean = mean,
         prec = prec
