@@ -973,8 +973,8 @@ LogisticNormalMixture <- function(components,
         prec[, , j] <- P
       }
       ms <- list(
-        k = as.integer(k)
-        weightpars = weightpars,
+        k = as.integer(k),
+        weightpars = as.numeric(weightpars),
         mean = mean,
         prec = prec
       )
