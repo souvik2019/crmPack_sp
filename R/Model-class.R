@@ -987,7 +987,7 @@ LogisticNormalMixture <- function(components,
       list(theta = c(0, 1))
     },
     datanames = c("nObs", "y", "x"),
-    sample = c("alpha0", "alpha1", "weightpars")
+    sample = c("alpha0", "alpha1", "weights")
   )
 }
 
