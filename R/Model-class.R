@@ -889,7 +889,9 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
   contains = "GeneralModel",
   slots = c(
     components = "list",         # List of (length k) ModelParamsNormal objects
-    weightpars = "numeric",       # Dirichlet parameters (length k)
+    weightpars = "numeric",       # Dirichlet parameters (length K)
+    prior_weights = "numeric",    # User defined prior weights 
+    M = "numeric",                # Required for prior_weights
     ref_dose = "numeric"
   ),
   prototype = prototype(
@@ -909,9 +911,9 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 #'   a list with [`ModelParamsNormal`] objects for each bivariate (log) normal
 #'   prior. See [`ModelParamsNormal`] for more details.
 #' @param weightpars (`numeric`)\cr the dirichlet parameters for the weights of 
-#'   k components. It is a vector of length k with strictly positive values.
+#'   K components. It is a vector of length K with strictly positive values.
 #' @param prior_weights Optional length-K vector summing to ~1; if provided with M, weightpars := 1 + M * prior_weights.
-#' @param M Optional positive integer concentration used with prior_weights (total concentration = K + M).
+#' @param M Optional positive real number concentration used with prior_weights (total concentration = K + M).
 #' @param ref_dose (`number`)\cr the reference dose \eqn{x*}
 #'   (strictly positive number).
 #'
@@ -919,9 +921,9 @@ LogisticKadaneBetaGamma <- function(theta, xmin, xmax, alpha, beta, shape, rate)
 #' @example examples/Model-class-LogisticNormalMixture.R
 #'
 LogisticNormalMixture <- function(components,
-  weightpars = NULL,        # optional: user can pass Dirichlet alphas directly
-  prior_weights = NULL,     # optional: user-supplied (w1,...,wk), sums to 1
-  M = NULL,                 # optional: positive integer concentration
+  weightpars = NULL,        # optional 1: user can pass Dirichlet alphas directly, if not chosen option 2
+  prior_weights = NULL,     # optional 2: user-supplied (w1,...,wk), sums to 1, if not chosen option 1 
+  M = NULL,                 # optional 2: positive real number concentration, if not chosen option 1 
                                   ref_dose) {
   k <- length(components)
   # --- derive weightpars if needed ---
