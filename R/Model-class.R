@@ -963,7 +963,7 @@ LogisticNormalMixture <- function(components,
       # comp = 1 with probability "w1", comp = 2 with probability "w2", ..., comp = k with probability "wk".
       theta ~ dmnorm(mean[1:2, comp], prec[1:2, 1:2, comp])
       alpha0 <- theta[1]
-      alpha1 <- theta[2]
+      alpha1 <- exp(theta[2])
     },
     modelspecs = function(from_prior) {
       k <- length(components)
