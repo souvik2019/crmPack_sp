@@ -140,8 +140,8 @@ NextBestMTD <- function(target, derive) {
   ),
   prototype = prototype(
     underdose = c(0,0.16),
-    target = c(0.16, 0.32999999999),
-    overdose = c(0.32999999999, 1),
+    target = c(0.16, 0.33),
+    overdose = c(0.33, 1),
     max_overdose_prob = 0.25
   ),
   contains = "NextBest",
@@ -175,7 +175,7 @@ NextBestNCRM <- function(underdose, target,
 #' @note Typically, end users will not use the `.DefaultNextBestNCRM()` function.
 #' @export
 .DefaultNextBestNCRM <- function() {
-  NextBestNCRM(underdose = c(0, 0.16), target = c(0.16, 0.32999999999), overdose = c(0.32999999999, 1), max_overdose_prob = 0.25)
+  NextBestNCRM(underdose = c(0, 0.16), target = c(0.16, 0.33), overdose = c(0.33, 1), max_overdose_prob = 0.25)
 }
 
 # NextBestNCRMLoss ----
