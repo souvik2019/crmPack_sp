@@ -133,11 +133,13 @@ NextBestMTD <- function(target, derive) {
 .NextBestNCRM <- setClass(
   Class = "NextBestNCRM",
   slots = c(
+    underdose = "numeric",
     target = "numeric",
     overdose = "numeric",
     max_overdose_prob = "numeric"
   ),
   prototype = prototype(
+    underdose = c(0,0.16),
     target = c(0.16, 0.32999999999),
     overdose = c(0.32999999999, 1),
     max_overdose_prob = 0.25
@@ -156,10 +158,11 @@ NextBestMTD <- function(target, derive) {
 #' @export
 #' @example examples/Rules-class-NextBestNCRM.R
 #'
-NextBestNCRM <- function(target,
+NextBestNCRM <- function(underdose, target,
                          overdose,
                          max_overdose_prob) {
   .NextBestNCRM(
+    underdose = underdose,
     target = target,
     overdose = overdose,
     max_overdose_prob = max_overdose_prob
@@ -172,7 +175,7 @@ NextBestNCRM <- function(target,
 #' @note Typically, end users will not use the `.DefaultNextBestNCRM()` function.
 #' @export
 .DefaultNextBestNCRM <- function() {
-  NextBestNCRM(target = c(0.16, 0.32999999999), overdose = c(0.32999999999, 1), max_overdose_prob = 0.25)
+  NextBestNCRM(underdose = c(0, 0.16), target = c(0.16, 0.32999999999), overdose = c(0.32999999999, 1), max_overdose_prob = 0.25)
 }
 
 # NextBestNCRMLoss ----
