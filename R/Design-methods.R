@@ -165,6 +165,15 @@ setMethod("simulate",
             data = thisData
           )$value
 
+          if (is.na(thisDose)) {
+            stopit <- structure(
+              TRUE,
+              message = "Dose is NA — stopping trial.",
+              report_label = "DoseIsNA-TooToxic"
+            )
+            stopit_results <- h_unpack_stopit(stopit)
+            break
+          }
 
           ## evaluate stopping rules
           stopit <- stopTrial(object@stopping,
