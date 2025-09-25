@@ -1957,6 +1957,64 @@ StoppingMinPatients <- function(nPatients = 20L,
   )
 }
 
+#' StoppingMinDlts ----
+
+## class ----
+
+#' `StoppingMinDlts`
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' [`StoppingMinDlts`] is the class for stopping based on minimum number of DLTs at a specific dose.
+#'
+#' @slot nDlts (`integer`)\cr minimum number of DLTs required to stop.
+#'
+#' @aliases StoppingMinDlts
+#' @export
+#'
+.StoppingMinDlts <- setClass(
+  Class = "StoppingMinDlts",
+  slots = c(nDlts = "integer"),
+  prototype = prototype(nDlts = 1L),
+  contains = "Stopping",
+  validity = v_stopping_min_dlts
+)
+
+## constructor ----
+
+#' @rdname StoppingMinDlts-class
+#'
+#' @param nDlts (`integer`)\cr minimum number of DLTs required to stop.
+#' @param report_label (`character` or `NA`)\cr optional label for reporting.
+#'
+#' @export
+#'
+StoppingMinDlts <- function(nDlts = 1L, report_label = NA_character_) {
+  assert_count(nDlts, positive = FALSE)
+
+  report_label <- h_default_if_empty(
+    as.character(report_label),
+    paste("≥", nDlts, "DLTs at recommended dose")
+  )
+
+  .StoppingMinDlts(
+    nDlts = as.integer(nDlts),
+    report_label = report_label
+  )
+}
+
+## default constructor ----
+
+#' @rdname StoppingMinDlts-class
+#' @note Typically, end users will not use the `.DefaultStoppingMinDlts()` function.
+#' @export
+.DefaultStoppingMinDlts <- function() {
+  StoppingMinDlts(
+    nDlts = 1L
+  )
+}
+
+
 # StoppingTargetProb ----
 
 ## class ----
