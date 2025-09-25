@@ -2400,6 +2400,42 @@ setMethod("stopTrial",
     }
 )
 
+
+## --------------------------------------------------
+## Stopping based on minimum number of dlts
+## --------------------------------------------------
+
+#' @describeIn stopTrial Stop based on minimum number of DLTs at the recommended dose
+#'
+setMethod("stopTrial",
+  signature = signature(
+    stopping = "StoppingMinDlts",
+    dose = "numeric",
+    samples = "Samples",
+    model = "GeneralModel",
+    data = "Data"
+  ),
+  def = function(stopping, dose, samples, model, data, ...) {
+    ## count dlts
+    dlt_count <- sum(data@y[data@x == dose])
+    
+    ## can we stop?
+    doStop <- dlt_count >= stopping@nDlts
+
+    ## generate message
+    text <- paste(
+      "Number of DLTs at dose", dose, "is", dlt_count,
+      "and thus", ifelse(doStop, "reached", "below"),
+      "the prespecified minimum of", stopping@nDlts
+    )
+
+    return(structure(doStop,
+      message = text,
+      report_label = stopping@report_label
+    ))
+  }
+)
+
 # nolint end
 
 ## StoppingTargetProb ----
