@@ -82,6 +82,7 @@ setMethod("simulate",
       ## the function to produce the run a single simulation
       ## with index "iterSim"
       runSim <- function(iterSim) {
+        cat('-sim', iterSim,'-')
         ## set the seed for this run
         set.seed(simSeeds[iterSim])
 
