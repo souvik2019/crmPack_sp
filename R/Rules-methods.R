@@ -2399,6 +2399,47 @@ setMethod("stopTrial",
       ))
     }
 )
+
+## --------------------------------------------------
+## Stopping if current and recommended doses are same 
+## --------------------------------------------------
+
+##' @describeIn stopTrial Stop if current and recommended doses are same 
+##'
+setMethod("stopTrial",
+  signature =
+    signature(
+      stopping = "StoppingDoseStagnation",
+      dose = "ANY",
+      samples = "ANY",
+      model = "ANY",
+      data = "Data"
+    ),
+  def =
+    function(stopping, dose, samples, model, data, ...) {
+    # Extract last cohort dose
+    last_dose <- tail(data@x, n = 1)
+
+    # Check if current dose equals recommended dose
+    doStop <- !is.na(dose) && dose == last_dose
+
+
+      ## generate message
+      text <- paste(
+        "Last dose was", last_dose,
+        "and next recommended dose is", dose,
+      "→", ifelse(doStop, "STOP", "CONTINUE")
+      )
+
+
+      ## return both
+      return(structure(doStop,
+        message = text,
+        report_label = stopping@report_label
+      ))
+    }
+)
+                 
 ## --------------------------------------------------
 ## Stopping based on minimum number of patients at Mtd
 ## --------------------------------------------------
