@@ -2027,7 +2027,7 @@ StoppingDoseStagnation <- function(check = TRUE,
 #' @aliases StoppingMinPatientsMtd
 #' @export
 #'
-StoppingMinPatientsMtd <- setClass(
+.StoppingMinPatientsMtd <- setClass(
   Class = "StoppingMinPatientsMtd",
   slots = c(nPatientsMtd = "integer"),
   prototype = prototype(nPatientsMtd = 6L),
