@@ -1957,6 +1957,66 @@ StoppingMinPatients <- function(nPatients = 20L,
   )
 }
 
+# StoppingMinPatientsMtd ----
+
+## class ----
+
+#' `StoppingMinPatientsMtd`
+#'
+#' @description `r lifecycle::badge("stable")`
+#'
+#' [`StoppingMinPatientsMtd`] is the class for stopping based on minimum number of
+#' patients at Mtd
+#'
+#' @slot nPatientsMtd (`number`)\cr minimum allowed number of patients at Mtd.
+#'
+#' @aliases StoppingMinPatientsMtd
+#' @export
+#'
+StoppingMinPatientsMtd <- setClass(
+  Class = "StoppingMinPatientsMtd",
+  slots = c(nPatientsMtd = "integer"),
+  prototype = prototype(nPatientsMtd = 6L),
+  contains = "Stopping",
+  validity = v_stopping_min_patients_mtd
+)
+
+## constructor ----
+
+#' @rdname StoppingMinPatientsMtd-class
+#'
+#' @param nPatientsMtd (`number`)\cr see slot definition.
+#' @param report_label (`string` or `NA`)\cr see slot definition.
+#'
+#' @example examples/Rules-class-StoppingMinPatientsMtd.R
+#' @export
+#'
+StoppingMinPatientsMtd <- function(nPatientsMtd = 6L,
+                                report_label = NA_character_) {
+  assert_count(nPatientsMtd, positive = TRUE)
+
+  report_label <- h_default_if_empty(
+    as.character(report_label),
+    paste("\u2265", nPatientsMtd, "patients dosed at Mtd")
+  )
+
+  .StoppingMinPatientsMtd(
+    nPatientsMtd = as.integer(nPatientsMtd),
+    report_label = report_label
+  )
+}
+
+## default constructor ----
+
+#' @rdname StoppingMinPatientsMtd-class
+#' @note Typically, end users will not use the `.DefaultStoppingMinPatientsMtd()` function.
+#' @export
+.DefaultStoppingMinPatientsMtd <- function() {
+  StoppingMinPatientsMtd(
+    nPatientsMtd = 6L
+  )
+}
+
 #' StoppingMinDlts ----
 
 ## class ----
