@@ -1957,6 +1957,60 @@ StoppingMinPatients <- function(nPatients = 20L,
   )
 }
 
+# StoppingDoseStagnation ----
+
+## class ----
+
+#' `StoppingDoseStagnation`
+#'
+#' @description `r lifecycle::badge("stable")`
+#'
+#' [`StoppingDoseStagnation`] is the class for checking if current dose and
+#' recommended doses are same
+#'
+#' @aliases StoppingDoseStagnation
+#' @export
+#'
+.StoppingDoseStagnation <- setClass(
+  Class = "StoppingDoseStagnation",
+  slots = c(check = "logical"),
+  prototype = prototype(check = TRUE),
+  contains = "Stopping"
+)
+
+## constructor ----
+
+#' @rdname StoppingDoseStagnation-class
+#'
+#' @param check (`logical`)\cr see slot definition.
+#' @param report_label (`string` or `NA`)\cr see slot definition.
+#'
+#' @export
+#'
+StoppingDoseStagnation <- function(check = TRUE,
+                                report_label = NA_character_) {
+  report_label <- h_default_if_empty(
+    as.character(report_label),
+    paste("\u2265", "current and recommended doses are ", ifelse(check,"same", "not same"))
+  )
+
+  .StoppingDoseStagnation(
+    check = as.logical(check),
+    report_label = report_label
+  )
+}
+
+## default constructor ----
+
+#' @rdname StoppingDoseStagnation-class
+#' @note Typically, end users will not use the `.DefaultStoppingDoseStagnation()` function.
+#' @export
+.DefaultStoppingDoseStagnation <- function() {
+  StoppingDoseStagnation(
+    check = TRUE
+  )
+}
+
 # StoppingMinPatientsMtd ----
 
 ## class ----
