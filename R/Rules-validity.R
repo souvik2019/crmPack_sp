@@ -407,6 +407,17 @@ v_stopping_min_patients <- function(object) {
   v$result()
 }
 
+#' @describeIn v_stopping validates that the [`StoppingMinPatientsMtd`]
+#'   object contains valid `nPatientsMtd` parameter.
+v_stopping_min_patients_mtd <- function(object) {
+  v <- Validate()
+  v$check(
+    test_int(object@nPatientsMtd, lower = .Machine$double.xmin),
+    "nPatientsMtd must be positive integer scalar"
+  )
+  v$result()
+}
+
 #' @describeIn v_stopping validates that the [`StoppingMinDlts`]
 #'   object contains valid `nDlts` parameter.
 v_stopping_min_dlts <- function(object) {
