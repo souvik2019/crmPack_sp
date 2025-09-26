@@ -2399,6 +2399,47 @@ setMethod("stopTrial",
       ))
     }
 )
+## --------------------------------------------------
+## Stopping based on minimum number of patients at Mtd
+## --------------------------------------------------
+
+##' @describeIn stopTrial Stop based on minimum number of patients at Mtd
+##'
+setMethod("stopTrial",
+  signature =
+    signature(
+      stopping = "StoppingMinPatientsMtd",
+      dose = "ANY",
+      samples = "ANY",
+      model = "ANY",
+      data = "Data"
+    ),
+  def =
+    function(stopping, dose, samples, model, data, ...) {
+      ## count mtds
+      mtd_count <- sum(data@x == dose)
+      
+      ## so can we stop?
+      doStop <- mtd_count >= stopping@nPatientsMtd
+
+      ## generate message
+      text <-
+        paste(
+          "Number of patients at Mtd is",
+          mtd_count,
+          "and thus",
+          ifelse(doStop, "reached", "below"),
+          "the prespecified minimum number",
+          stopping@nPatientsMtd
+        )
+
+      ## return both
+      return(structure(doStop,
+        message = text,
+        report_label = stopping@report_label
+      ))
+    }
+)
 
 
 ## --------------------------------------------------
