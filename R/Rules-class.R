@@ -1991,7 +1991,7 @@ StoppingDoseStagnation <- function(check = TRUE,
                                 report_label = NA_character_) {
   report_label <- h_default_if_empty(
     as.character(report_label),
-    paste("\u2265", "current and recommended doses are ", ifelse(check,"same", "not same"))
+    paste("current and recommended doses are ", ifelse(check,"same", "not same"))
   )
 
   .StoppingDoseStagnation(
