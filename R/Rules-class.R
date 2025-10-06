@@ -2079,7 +2079,7 @@ StoppingMinPatientsMtd <- function(nPatientsMtd = 6L,
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' [`StoppingMinDlts`] is the class for stopping based on minimum number of DLTs at a specific dose.
+#' [`StoppingMinDlts`] is the class for stopping based on minimum number of DLTs in the trial.
 #'
 #' @slot nDlts (`integer`)\cr minimum number of DLTs required to stop.
 #'
@@ -2108,7 +2108,7 @@ StoppingMinDlts <- function(nDlts = 1L, report_label = NA_character_) {
 
   report_label <- h_default_if_empty(
     as.character(report_label),
-    paste("≥", nDlts, "DLTs at recommended dose")
+    paste("≥", nDlts, "DLTs in the trial")
   )
 
   .StoppingMinDlts(
