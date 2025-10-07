@@ -112,6 +112,8 @@ setMethod("simulate",
         ## initialize with starting dose
         thisDose <- object@startingDose
 
+        cohort_probs_df <- data.frame(Cohort = integer(), Dose = numeric(), UD = numeric(), TD = numeric(), OD = numeric())
+        
         ## inside this loop we simulate the whole trial, until stopping
         while (!stopit) {
           ## what is the probability for tox. at this dose?
@@ -159,12 +161,24 @@ setMethod("simulate",
           )
 
           ## => what is the next best dose?
-          thisDose <- nextBest(object@nextBest,
+          next_best_d <- nextBest(object@nextBest,
             doselimit = doselimit,
             samples = thisSamples,
             model = object@model,
             data = thisData
-          )$value
+          )
+          thisDose <- next_best_d$value
+          
+          ## Extract UD/TD/OD probabilities
+          dose_prob <- next_best_d$probs[next_best_d$probs[, 1] == thisDose, 2:4]
+          cohort_probs_df <- rbind(cohort_probs_df, data.frame(
+            Cohort = nrow(cohort_probs_df) + 1,
+            Dose = thisDose,
+            UD = dose_prob[1],
+            TD = dose_prob[2],
+            OD = dose_prob[3]
+          ))
+
 
           if (is.na(thisDose)) {
             stopit <- structure(
@@ -221,7 +235,8 @@ setMethod("simulate",
                 "message"
               ),
             report_results = stopit_results,
-            additional_stats = additional_stats
+            additional_stats = additional_stats,
+            cohort_probs = cohort_probs_df
           )
         return(thisResult)
       }
