@@ -269,6 +269,7 @@ setMethod("simulate",
         stop_report = simulations_output$stop_matrix,
         stop_reasons = simulations_output$stopReasons,
         additional_stats = simulations_output$additional_stats,
+        cohort_probs = simulations_output$cohort_probs,
         seed = RNGstate
       )
 
