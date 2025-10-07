@@ -236,7 +236,10 @@ setMethod("simulate",
               ),
             report_results = stopit_results,
             additional_stats = additional_stats,
-            cohort_probs = cohort_probs_df
+            cohort_probs = {
+            rownames(cohort_probs_df) <- NULL
+            cohort_probs_df
+            }
           )
         return(thisResult)
       }
