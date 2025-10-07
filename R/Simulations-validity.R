@@ -62,13 +62,6 @@ v_simulations <- function(object) {
     equals the number of simulations and which must not contain any missing values"
   )
 
-  
-  v$check(
-      identical(length(object@cohort_probs), nSims),
-      "cohort_probs must have same length as data"
-  )
-
-
   v$result()
 }
 
