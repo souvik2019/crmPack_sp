@@ -165,6 +165,7 @@ setMethod(
       (prob_overdose < nextBest@max_overdose_prob)
 
     next_dose <- if (any(is_dose_eligible)) {
+      check_number <- 1
       # If maximum target probability is higher than some numerical threshold,
       # then take that level, otherwise stick to the maximum level that is OK.
       # next_best_level is relative to eligible doses.
@@ -229,6 +230,7 @@ setMethod(
 
     list(
       value = next_dose,
+      flag_non_na = check_number,
       plot = plot_joint,
       singlePlots = list(plot1 = p1, plot2 = p2),
       probs = cbind(
