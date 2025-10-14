@@ -168,6 +168,8 @@ setMethod("simulate",
             data = thisData
           )
           thisDose <- next_best_d$value
+          if(is.na(thisDose) & next_best_d$flag_non_na==1)
+            cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
           
           ## Extract UD/TD/OD probabilities
           dose_prob <- next_best_d$probs[next_best_d$probs[, 1] == thisDose, 2:4]
