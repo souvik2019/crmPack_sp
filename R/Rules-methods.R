@@ -2545,7 +2545,7 @@ setMethod(
       0,
       mean(
         prob(dose = dose, model, samples, ...) >= stopping@target[1] &
-          prob(dose = dose, model, samples, ...) <= stopping@target[2]
+          prob(dose = dose, model, samples, ...) < stopping@target[2]
       )
     )
 
