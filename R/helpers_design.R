@@ -178,6 +178,7 @@ h_simulations_output_format <- function(resultList) {
 
   # individual stopping rule results as matrix, labels as column names
   stopResults <- lapply(resultList, "[[", "report_results")
+  cat('\n','-----',stopResults,'-------','\n')
   stop_matrix <- as.matrix(do.call(rbind, stopResults))
 
   # Result list of additional statistical summary.
