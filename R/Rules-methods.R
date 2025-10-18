@@ -2463,7 +2463,7 @@ setMethod("stopTrial",
   def =
     function(stopping, dose, samples, model, data, ...) {
       ## count mtds
-      mtd_count <- sum(data@x == dose)
+      mtd_count <- if (!is.na(dose)) sum(data@x == dose) else 0L
       
       ## so can we stop?
       doStop <- mtd_count >= stopping@nPatientsMtd
