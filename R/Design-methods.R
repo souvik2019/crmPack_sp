@@ -201,6 +201,9 @@ setMethod("simulate",
           )
 
           stopit_results <- h_unpack_stopit(stopit)
+          
+          cat("Simulation", iterSim, "stop_report:\n")
+          print(stopit_results)
         }
 
         ## get the fit
