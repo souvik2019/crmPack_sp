@@ -2017,7 +2017,7 @@ setMethod(
   definition = function(stopping, dose, samples, model, data, ...) {
     do_stop <- is.na(dose) || (data@placebo && dose == min(data@doseGrid))
     if(is.na(dose)){
-      cat('---- NA dose ---'.'\n')
+      cat('---- NA dose ---','\n')
       cat('---- do_stop value:', do_stop,'------','\n')
       }
     msg <- paste(
