@@ -1605,6 +1605,22 @@ setMethod(
   }
 )
 
+#' @describeIn maxDose Custom increment rule using a constant escalation factor
+#' @aliases maxDose-IncrementsConstantFactor
+#' @export
+setMethod(
+  f = "maxDose",
+  signature = signature(
+    increments = "IncrementsConstantFactor",
+    data = "Data"
+  ),
+  definition = function(increments, data, ...) {
+    current_dose <- data@x[data@nObs]
+    max_allowed <- min(increments@factor * current_dose, increments@max_dose)
+    max(data@doseGrid[data@doseGrid <= max_allowed])
+  }
+)
+
 ## IncrementsHSRBeta ----
 
 #' @describeIn maxDose determine the maximum possible next dose for escalation.
