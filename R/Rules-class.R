@@ -1354,6 +1354,39 @@ IncrementsDoseLevels <- function(levels = 1L, basis_level = "last") {
   IncrementsDoseLevels(levels = 2L, basis_level = "last")
 }
 
+#' IncrementsConstantFactor
+#'
+#' @description `IncrementsConstantFactor` is a class for increment control using a constant escalation factor.
+#'
+#' @slot factor (`numeric`)\\cr The escalation multiplier (e.g., 3.3).
+#' @slot max_dose (`numeric`)\\cr The maximum dose allowed.
+#'
+#' @aliases IncrementsConstantFactor
+#' @export
+.IncrementsConstantFactor <- setClass(
+  Class = "IncrementsConstantFactor",
+  slots = c(
+    factor = "numeric",
+    max_dose = "numeric"
+  ),
+  prototype = prototype(
+    factor = 3.3,
+    max_dose = 75
+  ),
+  contains = "Increments"
+)
+
+#' @rdname IncrementsConstantFactor-class
+#' @param factor (`numeric`)\\cr Escalation multiplier.
+#' @param max_dose (`numeric`)\\cr Maximum allowed dose.
+#' @export
+IncrementsConstantFactor <- function(factor = 3.3, max_dose = 75) {
+  .IncrementsConstantFactor(
+    factor = factor,
+    max_dose = max_dose
+  )
+}
+
 # IncrementsHSRBeta ----
 
 ## class ----
