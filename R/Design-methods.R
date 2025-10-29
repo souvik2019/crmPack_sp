@@ -73,11 +73,12 @@ setMethod("simulate",
       nArgs <- max(nrow(args), 1L)
 
       ## seed handling
-      RNGstate <- set_seed(seed)
+      RNGstate <- as.integer(seed) # set_seed(seed)
 
       ## from this,
       ## generate the individual seeds for the simulation runs
-      simSeeds <- sample.int(n = 2147483647, size = as.integer(nsim))
+      set.seed(RNGstate)
+      simSeeds <- sample.int(n = 987654321, size = as.integer(nsim))
 
       ## the function to produce the run a single simulation
       ## with index "iterSim"
