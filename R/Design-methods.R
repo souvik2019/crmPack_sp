@@ -114,7 +114,8 @@ setMethod("simulate",
         thisDose <- object@startingDose
 
         cohort_probs_df <- data.frame(Cohort = integer(), Dose = numeric(), UD = numeric(), TD = numeric(), OD = numeric())
-        
+        # Initialize cohort index outside the simulation function
+        cohort_index <- 1
         ## inside this loop we simulate the whole trial, until stopping
         while (!stopit) {
           ## what is the probability for tox. at this dose?
@@ -167,21 +168,36 @@ setMethod("simulate",
             samples = thisSamples,
             model = object@model,
             data = thisData
-          )
+          )      
+
+          # Get all dose probabilities from current_dose to next_dose
+          dose_range <- object@data@doseGrid[
+            object@data@doseGrid >= thisDose & object@data@doseGrid <= next_best_d$value
+          ]
+          
+          # Filter the rows in next_best_d$probs for these doses
+          dose_probs_subset <- next_best_d$probs[
+            next_best_d$probs[, 1] %in% dose_range, , drop = FALSE
+          ]
+          
+          # Append each dose's probabilities to cohort_probs_df
+          for (i in seq_len(nrow(dose_probs_subset))) {
+            cohort_probs_df <- rbind(cohort_probs_df, data.frame(
+              Cohort = cohort_index,
+              Dose = dose_probs_subset[i, 1],
+              UD = dose_probs_subset[i, 2],
+              TD = dose_probs_subset[i, 3],
+              OD = dose_probs_subset[i, 4]
+            ))
+          }
+          
+          # Increment cohort index after processing all doses in this cohort
+          cohort_index <- cohort_index + 1
+
           thisDose <- next_best_d$value
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
             cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
           
-          ## Extract UD/TD/OD probabilities
-          dose_prob <- next_best_d$probs[next_best_d$probs[, 1] == thisDose, 2:4]
-          cohort_probs_df <- rbind(cohort_probs_df, data.frame(
-            Cohort = nrow(cohort_probs_df) + 1,
-            Dose = thisDose,
-            UD = dose_prob[1],
-            TD = dose_prob[2],
-            OD = dose_prob[3]
-          ))
-
 
           # if (is.na(thisDose)) {
           #   stopit <- structure(
