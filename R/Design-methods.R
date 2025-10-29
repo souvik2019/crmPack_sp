@@ -171,8 +171,10 @@ setMethod("simulate",
           )      
 
           # Get all dose probabilities from current_dose to next_dose
+          mindose <- min(thisDose, next_best_d$value)
+          maxdose <- max(thisDose, next_best_d$value)
           dose_range <- object@data@doseGrid[
-            object@data@doseGrid >= thisDose & object@data@doseGrid <= next_best_d$value
+            object@data@doseGrid >= mindose & object@data@doseGrid <= maxdose
           ]
           
           # Filter the rows in next_best_d$probs for these doses
