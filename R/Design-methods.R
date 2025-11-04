@@ -77,7 +77,7 @@ setMethod("simulate",
 
       ## from this,
       ## generate the individual seeds for the simulation runs
-      set.seed(RNGstate)
+      # set.seed(RNGstate)
       #simSeeds <- sample.int(n = 987654321, size = as.integer(nsim))
 
       ## the function to produce the run a single simulation
@@ -139,6 +139,7 @@ setMethod("simulate",
             )
           }
 
+          set.seed(RNGstate)
           thisData <- h_determine_dlts(
             data = thisData,
             dose = thisDose,
