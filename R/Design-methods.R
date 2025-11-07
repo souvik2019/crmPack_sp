@@ -73,11 +73,11 @@ setMethod("simulate",
       nArgs <- max(nrow(args), 1L)
 
       ## seed handling
-      RNGstate <-  set_seed(seed) # as.integer(seed)
+      RNGstate <-  as.integer(seed) #set_seed(seed) # 
 
       ## from this,
       ## generate the individual seeds for the simulation runs
-      # set.seed(RNGstate)
+      set.seed(RNGstate)
       simSeeds <- sample.int(n = 2147483647, size = as.integer(nsim)) #2147483647 987654321
 
       ## the function to produce the run a single simulation
@@ -85,7 +85,7 @@ setMethod("simulate",
       runSim <- function(iterSim) {
         cat('-sim', iterSim,'-')
         ## set the seed for this run
-        set.seed(simSeeds[iterSim])
+        #set.seed(simSeeds[iterSim])
 
         ## what is now the argument for the truth?
         ## (appropriately recycled)
