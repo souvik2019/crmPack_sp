@@ -83,7 +83,7 @@ setMethod("simulate",
       ## the function to produce the run a single simulation
       ## with index "iterSim"
       runSim <- function(iterSim) {
-        cat('-sim', iterSim,'-')
+        cat('-sim', iterSim,'-','\n')
         ## set the seed for this run
         #set.seed(simSeeds[iterSim])
 
@@ -118,6 +118,8 @@ setMethod("simulate",
         cohort_index <- 1
         ## inside this loop we simulate the whole trial, until stopping
         while (!stopit) {
+          cat('-cohort-', cohort_index,'\n')
+          cat('-current dose-', thisDose,'\n')
           ## what is the probability for tox. at this dose?
           thisProb <- h_this_truth(
             thisDose,
@@ -198,6 +200,7 @@ setMethod("simulate",
           cohort_index <- cohort_index + 1
 
           thisDose <- next_best_d$value
+          cat('-nextdose-',thisDose,'\n')
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
             cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
           
