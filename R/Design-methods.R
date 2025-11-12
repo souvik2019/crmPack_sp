@@ -199,7 +199,8 @@ setMethod("simulate",
           # Increment cohort index after processing all doses in this cohort
           cohort_index <- cohort_index + 1
 
-          thisDose <- next_best_d$value
+          cat('Enter next dose:','\n')
+          thisDose <- scan(what = numeric(), quiet = TRUE)#next_best_d$value
           cat('-nextdose-',thisDose,'\n')
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
             cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
