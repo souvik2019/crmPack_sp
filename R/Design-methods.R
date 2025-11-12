@@ -199,7 +199,8 @@ setMethod("simulate",
           # Increment cohort index after processing all doses in this cohort
           cohort_index <- cohort_index + 1
 
-          cat('Enter next dose:','\n')
+          cat('Next recommended dose from crmpPack:', next_best_d$value,'\n')
+          cat('Enter your next dose from custom code:','\n')
           thisDose <- scan(what = numeric(), quiet = TRUE)#next_best_d$value
           cat('-nextdose-',thisDose,'\n')
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
