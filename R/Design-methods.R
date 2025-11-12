@@ -150,7 +150,9 @@ setMethod("simulate",
             cohort_size = thisSize,
             cohort_size_placebo = thisSize.PL,
             dose_grid = object@data@doseGrid[1],
-            first_separate = firstSeparate
+            first_separate = firstSeparate,
+            iterSim = iterSim,
+            cohort_index = cohort_index
           )
 
           ## what is the dose limit?
@@ -199,10 +201,10 @@ setMethod("simulate",
           # Increment cohort index after processing all doses in this cohort
           cohort_index <- cohort_index + 1
 
-          cat('Next recommended dose from crmpPack:', next_best_d$value,'\n')
-          cat('Enter your next dose from custom code:','\n')
-          thisDose <- scan(what = numeric(), quiet = TRUE)#next_best_d$value
-          cat('-nextdose-',thisDose,'\n')
+          #cat('Next recommended dose from crmpPack:', next_best_d$value,'\n')
+          #cat('Enter your next dose from custom code:','\n')
+          thisDose <- next_best_d$value #scan(what = numeric(), quiet = TRUE)
+          #cat('-nextdose-',thisDose,'\n')
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
             cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
           
