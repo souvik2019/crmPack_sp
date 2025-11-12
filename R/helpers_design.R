@@ -266,6 +266,7 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
+    cat(' working direct -----',getwd(),'\n')
     cat('Enter dlts:','\n')
     dlts <- scan(what = numeric(), quiet = TRUE)#rbinom(n = cohort_size, size = 1, prob = prob)
     cat('-dlts-', dlts,'\n')
