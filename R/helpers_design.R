@@ -267,6 +267,7 @@ h_determine_dlts <- function(data,
     }
   } else {
     dlts <- rbinom(n = cohort_size, size = 1, prob = prob)
+    cat('-dlts-', dlts,'\n')
     if ((data@placebo) && cohort_size_placebo > 0) {
       dlts_placebo <- rbinom(n = cohort_size_placebo, size = 1, prob = prob_placebo)
     }
