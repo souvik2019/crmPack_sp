@@ -266,7 +266,7 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
-    dltmat <- readRDS("data/dltmat_custom_code_scen1.rds")
+    dltmat <- readRDS("dltmat_custom_code_scen1.rds")
     cat(' dim of dltmat -----',dim(dltmat), '-type-',class(dltmat),'\n')
     cat('Enter dlts:','\n')
     dlts <- scan(what = numeric(), quiet = TRUE)#rbinom(n = cohort_size, size = 1, prob = prob)
