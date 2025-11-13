@@ -270,6 +270,7 @@ h_determine_dlts <- function(data,
   } else {
     dltmat <- readRDS("dltmat_custom_code_scen1.rds")
     total_dlts = dltmat[iterSim,cohort_index]
+    cat('-sim-cohort-totaldlts-',iterSim,cohort_index,total_dlts)
     if(total_dlts == 0)
       dlts = c(0,0,0)
     if(total_dlts == 1)
