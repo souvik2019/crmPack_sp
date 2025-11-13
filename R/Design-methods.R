@@ -198,8 +198,8 @@ setMethod("simulate",
           
           # Increment cohort index after processing all doses in this cohort
           cohort_index <- cohort_index + 1
-          dosemat = readRDS('dosemat_custom_code_scen1.rds')
-          cat('-----dim----', dim(dosemat))
+          #dosemat = readRDS('dosemat_custom_code_scen1.rds')
+          #cat('-----dim----', dim(dosemat))
           thisDose <- next_best_d$value 
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
             cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
