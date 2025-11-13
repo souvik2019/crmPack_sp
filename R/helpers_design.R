@@ -244,6 +244,7 @@ h_determine_dlts <- function(data,
                              cohort_size_placebo,
                              dose_grid,
                              first_separate,
+                             dltmat,
                              iterSim,
                              cohort_index) {
   assert_class(data, "Data")
@@ -269,7 +270,7 @@ h_determine_dlts <- function(data,
     }
   } else {
 
-    dltmat <- readRDS("dltmat_custom_code_scen1.rds")
+    #dltmat <- readRDS("dltmat_custom_code_scen1.rds")
     total_dlts = dltmat[iterSim,cohort_index]
     cat('-sim-cohort-totaldlts-',iterSim,cohort_index,total_dlts)
     if(total_dlts == 0)
