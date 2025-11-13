@@ -118,8 +118,8 @@ setMethod("simulate",
         cohort_index <- 1
         ## inside this loop we simulate the whole trial, until stopping
         while (!stopit) {
-          cat('-cohort-', cohort_index,'\n')
-          cat('-current dose-', thisDose,'\n')
+          #cat('-cohort-', cohort_index,'\n')
+          #cat('-current dose-', thisDose,'\n')
           ## what is the probability for tox. at this dose?
           thisProb <- h_this_truth(
             thisDose,
