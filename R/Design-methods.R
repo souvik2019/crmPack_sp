@@ -58,7 +58,7 @@ setMethod("simulate",
   def =
     function(object, nsim = 1L, seed = NULL,
              truth, args = NULL, firstSeparate = FALSE,
-             mcmcOptions = McmcOptions(),
+             mcmcOptions = McmcOptions(), dosemat = NULL, dltmat = NULL,
              parallel = FALSE, nCores =
                min(parallel::detectCores(), 5), derive = list(),
              ...) {
@@ -151,6 +151,7 @@ setMethod("simulate",
             cohort_size_placebo = thisSize.PL,
             dose_grid = object@data@doseGrid[1],
             first_separate = firstSeparate,
+            dltmat = dltmat,
             iterSim = iterSim,
             cohort_index = cohort_index
           )
@@ -203,7 +204,7 @@ setMethod("simulate",
 
           #cat('Next recommended dose from crmpPack:', next_best_d$value,'\n')
           #cat('Enter your next dose from custom code:','\n')
-          dosemat <- readRDS("dosemat_custom_code_scen1.rds")
+          #dosemat <- readRDS("dosemat_custom_code_scen1.rds")
           thisDose <- dosemat[itersim, cohort_index] #next_best_d$value #scan(what = numeric(), quiet = TRUE)
           #cat('-nextdose-',thisDose,'\n')
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
