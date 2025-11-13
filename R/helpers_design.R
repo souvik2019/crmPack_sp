@@ -243,10 +243,7 @@ h_determine_dlts <- function(data,
                              cohort_size,
                              cohort_size_placebo,
                              dose_grid,
-                             first_separate,
-                             dltmat,
-                             iterSim,
-                             cohort_index) {
+                             first_separate) {
   assert_class(data, "Data")
   assert_number(dose)
   assert_number(prob)
@@ -269,21 +266,7 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
-
-    #dltmat <- readRDS("dltmat_custom_code_scen1.rds")
-    total_dlts = dltmat[iterSim,cohort_index]
-    cat('-sim-cohort-totaldlts-',iterSim,cohort_index,total_dlts)
-    if(total_dlts == 0)
-      dlts = c(0,0,0)
-    if(total_dlts == 1)
-      dlts = c(0,0,1)
-    if(total_dlts == 2)
-      dlts = c(0,1,1)
-    if(total_dlts == 3)
-      dlts = c(1,1,1)
-    # cat('Enter dlts:','\n')
-    # dlts <- scan(what = numeric(), quiet = TRUE)#rbinom(n = cohort_size, size = 1, prob = prob)
-    # cat('-dlts-', dlts,'\n')
+    dlts <- rbinom(n = cohort_size, size = 1, prob = prob)
     if ((data@placebo) && cohort_size_placebo > 0) {
       dlts_placebo <- rbinom(n = cohort_size_placebo, size = 1, prob = prob_placebo)
     }
