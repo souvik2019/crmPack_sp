@@ -266,6 +266,8 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
+    dltmat = readRDS('dltmat_current_code_scen1.rds')
+    cat('--- dim dltmat----', dim(dltmat))
     dlts <- rbinom(n = cohort_size, size = 1, prob = prob)
     if ((data@placebo) && cohort_size_placebo > 0) {
       dlts_placebo <- rbinom(n = cohort_size_placebo, size = 1, prob = prob_placebo)
