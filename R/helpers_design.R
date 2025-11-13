@@ -268,9 +268,6 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
-    
-url <- "https://raw.githubusercontent.com/souvik2019/crmPack_sp/patch-1/dltmat_custom_code_scen1.rds"
-download.file(url, destfile = "dltmat_custom_code_scen1.rds", mode = "wb")
 
     dltmat <- readRDS("dltmat_custom_code_scen1.rds")
     total_dlts = dltmat[iterSim,cohort_index]
