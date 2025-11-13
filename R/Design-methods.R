@@ -205,7 +205,7 @@ setMethod("simulate",
           #cat('Next recommended dose from crmpPack:', next_best_d$value,'\n')
           #cat('Enter your next dose from custom code:','\n')
           #dosemat <- readRDS("dosemat_custom_code_scen1.rds")
-          thisDose <- dosemat[itersim, cohort_index] #next_best_d$value #scan(what = numeric(), quiet = TRUE)
+          thisDose <- dosemat[iterSim, cohort_index] #next_best_d$value #scan(what = numeric(), quiet = TRUE)
           #cat('-nextdose-',thisDose,'\n')
           if(is.na(thisDose) & next_best_d$flag_non_na==1)
             cat('------- Warning: index mismatching, check Rules-Method.R line 226 --------','\n')
