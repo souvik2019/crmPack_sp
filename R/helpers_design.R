@@ -243,7 +243,8 @@ h_determine_dlts <- function(data,
                              cohort_size,
                              cohort_size_placebo,
                              dose_grid,
-                             first_separate) {
+                             first_separate,
+                            iterSim, cohort_index) {
   assert_class(data, "Data")
   assert_number(dose)
   assert_number(prob)
@@ -266,9 +267,12 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
-    dltmat = readRDS('dltmat_custom_code_scen1.rds')
-    cat('--- dim dltmat----', dim(dltmat))
-    dlts <- rbinom(n = cohort_size, size = 1, prob = prob)
+    dltmat <- readRDS('dltmat_custom_code_scen1.rds')
+    total_dlts <- dltmat[iterSim, cohort_index]
+    dlts <- c(rep(0,3-total_dlts),rep(1,total_dlts))
+    cat('-dlts-', dlts)
+    #cat('--- dim dltmat----', dim(dltmat))
+    #dlts <- rbinom(n = cohort_size, size = 1, prob = prob)
     if ((data@placebo) && cohort_size_placebo > 0) {
       dlts_placebo <- rbinom(n = cohort_size_placebo, size = 1, prob = prob_placebo)
     }
