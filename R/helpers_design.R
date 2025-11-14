@@ -269,6 +269,10 @@ h_determine_dlts <- function(data,
   } else {
     dltmat <- readRDS('dltmat_custom_code_scen1.rds')
     total_dlts <- dltmat[iterSim, cohort_index]
+    if(is.na(total_dlts)){
+      total_dlts <- 1
+      cat('--- NON MATCHING CASE ---',iterSim+1,'th of 1000 Sim','\n')
+    }
     dlts <- c(rep(0,3-total_dlts),rep(1,total_dlts))
     cat('-dlts-', dlts)
     #cat('--- dim dltmat----', dim(dltmat))
