@@ -274,7 +274,7 @@ h_determine_dlts <- function(data,
       cat('--- NON MATCHING CASE ---',iterSim,'th of 1000 Sim','\n')
     }
     dlts <- c(rep(0,3-total_dlts),rep(1,total_dlts))
-    cat('-dlts-', dlts)
+    #cat('-dlts-', dlts)
     #cat('--- dim dltmat----', dim(dltmat))
     #dlts <- rbinom(n = cohort_size, size = 1, prob = prob)
     if ((data@placebo) && cohort_size_placebo > 0) {
