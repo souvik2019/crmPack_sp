@@ -267,7 +267,7 @@ h_determine_dlts <- function(data,
       }
     }
   } else {
-    dltmat <- readRDS('dltmat_custom_code_scen2.rds')
+    dltmat <- readRDS('dltmat_custom_code_scen3.rds')
     total_dlts <- dltmat[iterSim, cohort_index]
     if(is.na(total_dlts)){
       total_dlts <- 1
