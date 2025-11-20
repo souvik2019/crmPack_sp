@@ -73,7 +73,7 @@ setMethod("simulate",
       nArgs <- max(nrow(args), 1L)
 
       ## seed handling
-      RNGstate <-  as.integer(seed) #set_seed(seed) # 
+      RNGstate <-  set_seed(seed) #as.integer(seed)  
 
       ## from this,
       ## generate the individual seeds for the simulation runs
