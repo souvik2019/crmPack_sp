@@ -176,15 +176,16 @@ setMethod("simulate",
           )      
 
           # Get all dose probabilities from current_dose to next_dose
-          mindose <- min(thisDose, next_best_d$value)
-          maxdose <- max(thisDose, next_best_d$value)
-          dose_range <- object@data@doseGrid[
-            object@data@doseGrid >= mindose & object@data@doseGrid <= maxdose
-          ]
-          
+          # mindose <- min(thisDose, next_best_d$value)
+          # maxdose <- max(thisDose, next_best_d$value)
+          # dose_range <- object@data@doseGrid[
+          #   object@data@doseGrid >= mindose & object@data@doseGrid <= maxdose
+          # ]
+          cat('--- next_best_d$probs ---\n')
+          print(next_best_d$probs)
           # Filter the rows in next_best_d$probs for these doses
           dose_probs_subset <- next_best_d$probs[
-            next_best_d$probs[, 1] %in% dose_range, , drop = FALSE
+            next_best_d$probs[, 1] %in% object@data@doseGrid, , drop = FALSE
           ]
           
           # Append each dose's probabilities to cohort_probs_df
