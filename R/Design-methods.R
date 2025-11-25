@@ -184,20 +184,16 @@ setMethod("simulate",
           cat('--- next_best_d$probs ---\n')
           print(next_best_d$probs)
           # Filter the rows in next_best_d$probs for these doses
-          dose_probs_subset <- next_best_d$probs[
-            next_best_d$probs[, 1] %in% object@data@doseGrid, , drop = FALSE
-          ]
+          # dose_probs_subset <- next_best_d$probs[
+          #   next_best_d$probs[, 1] %in% object@data@doseGrid, , drop = FALSE
+          # ]
           
           # Append each dose's probabilities to cohort_probs_df
-          for (i in seq_len(nrow(dose_probs_subset))) {
-            cohort_probs_df <- rbind(cohort_probs_df, data.frame(
-              Cohort = cohort_index,
-              Dose = dose_probs_subset[i, 1],
-              UD = dose_probs_subset[i, 2],
-              TD = dose_probs_subset[i, 3],
-              OD = dose_probs_subset[i, 4]
+          # for (i in seq_len(nrow(dose_probs_subset))) {
+            cohort_probs_df <- rbind(cohort_probs_df, cbind(
+              cohort_index, next_best_d$probs
             ))
-          }
+          # }
           
           # Increment cohort index after processing all doses in this cohort
           cohort_index <- cohort_index + 1
