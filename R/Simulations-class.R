@@ -154,13 +154,15 @@ Simulations <- function(fit,
                         stop_reasons,
                         stop_report,
                         additional_stats,
+                        cohort_probs, 
                         ...) {
   start <- GeneralSimulations(...)
   .Simulations(start,
     fit = fit,
     stop_report = stop_report,
     stop_reasons = stop_reasons,
-    additional_stats = additional_stats
+    additional_stats = additional_stats,
+    cohort_probs = cohort_probs
   )
 }
 
