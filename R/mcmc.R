@@ -416,7 +416,7 @@ myBayesLogit <- function(y,
         .RNG.name = "base::Mersenne-Twister",
         .RNG.seed = rSeed
       ),
-    n.chains = 1,
+    n.chains = 2,
     n.adapt = 0
   )
   ## burn in
