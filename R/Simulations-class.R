@@ -154,7 +154,7 @@ Simulations <- function(fit,
                         stop_reasons,
                         stop_report,
                         additional_stats,
-                        cohort_probs, 
+                        cohort_probs = list(), 
                         ...) {
   start <- GeneralSimulations(...)
   .Simulations(start,
