@@ -78,14 +78,14 @@ setMethod("simulate",
       ## from this,
       ## generate the individual seeds for the simulation runs
       set.seed(RNGstate)
-      #simSeeds <- sample.int(n = 2147483647, size = as.integer(nsim)) #2147483647 987654321
+      simSeeds <- sample.int(n = 2147483647, size = as.integer(nsim)) #2147483647 987654321
 
       ## the function to produce the run a single simulation
       ## with index "iterSim"
       runSim <- function(iterSim) {
         if(iterSim%%10==0){cat('-', iterSim)}
         ## set the seed for this run
-        #set.seed(simSeeds[iterSim])
+        set.seed(simSeeds[iterSim])
 
         ## what is now the argument for the truth?
         ## (appropriately recycled)
