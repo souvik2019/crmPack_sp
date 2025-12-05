@@ -73,7 +73,7 @@ setMethod("simulate",
       nArgs <- max(nrow(args), 1L)
 
       ## seed handling
-      RNGstate <-  as.integer(seed) #set_seed(seed)  
+      RNGstate <-  set_seed(seed)  #as.integer(seed) #
 
       ## from this,
       ## generate the individual seeds for the simulation runs
@@ -181,8 +181,8 @@ setMethod("simulate",
           # dose_range <- object@data@doseGrid[
           #   object@data@doseGrid >= mindose & object@data@doseGrid <= maxdose
           # ]
-          cat('--- next_best_d$probs ---\n')
-          print(next_best_d$probs)
+          # cat('--- next_best_d$probs ---\n')
+          # print(next_best_d$probs)
           # Filter the rows in next_best_d$probs for these doses
           # dose_probs_subset <- next_best_d$probs[
           #   next_best_d$probs[, 1] %in% object@data@doseGrid, , drop = FALSE
